@@ -70,38 +70,6 @@ namespace Application.Services
             return ToDto(store);
         }
 
-        public async Task<bool> DeleteStore(Guid id)
-        {
-            var store = await _context.Stores
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (store is null)
-                return false;
-
-            var orderIds = await _context.Orders
-                .Where(o => o.StoreId == id)
-                .Select(o => o.Id)
-                .ToListAsync();
-
-            var cartIds = await _context.Carts
-                .Where(c => c.StoreId == id)
-                .Select(c => c.Id)
-                .ToListAsync();
-
-            _context.OrderItems.RemoveRange(_context.OrderItems.Where(i => orderIds.Contains(i.OrderId)));
-            _context.Orders.RemoveRange(_context.Orders.Where(o => o.StoreId == id));
-            _context.CartItems.RemoveRange(_context.CartItems.Where(i => cartIds.Contains(i.CartId)));
-            _context.Carts.RemoveRange(_context.Carts.Where(c => c.StoreId == id));
-            _context.Cars.RemoveRange(_context.Cars.Where(c => c.StoreId == id));
-            _context.CarAccessories.RemoveRange(_context.CarAccessories.Where(a => a.StoreId == id));
-            _context.Complaints.RemoveRange(_context.Complaints.Where(c => c.StoreId == id));
-            _context.Stores.Remove(store);
-
-            await _context.SaveChangesAsync();
-
-            return true;
-        }
-
         private static StoreDto ToDto(Store s)
         {
             return new StoreDto

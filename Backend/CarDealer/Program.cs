@@ -11,7 +11,6 @@ context.UseNpgsql(builder.Configuration["SQL_CONNECTION_STRING"]));
 
 
 
-
 var app = builder.Build();
 
 
