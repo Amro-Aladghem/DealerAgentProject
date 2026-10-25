@@ -1,0 +1,13 @@
+using Domain.Enums;
+
+namespace Application.Dtos
+{
+    public class CartItemDto
+    {
+        public Guid? Id { get; set; }
+        public Guid CartId { get; set; }
+        public Guid ProductId { get; set; }
+        public eOrderItemType ItemType { get; set; }
+        public int Quantity { get; set; }
+    }
+}
