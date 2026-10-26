@@ -40,6 +40,29 @@ namespace Infrastructure.Data
                     status => status.ToString(),
                     status => Enum.Parse<eOrderStatus>(status)
                 );
+
+            //modelBuilder.Entity<ChatRole>().HasData(
+            //    new ChatRole { Id = 1, Name = "InventoryAgent" },
+            //    new ChatRole { Id = 2, Name = "MonitorAgent" },
+            //    new ChatRole { Id = 3, Name = "ShoppingListAgent" },
+            //    new ChatRole { Id = 4, Name = "User" },
+            //    new ChatRole { Id = 5, Name = "Tool" }
+            //);
+
+            modelBuilder.Entity<Notification>().Property(p => p.NotficationStatus)
+                .HasConversion(
+                    status => status.ToString(),
+                    status => Enum.Parse<eNotificationStatus>(status)
+                );
+
+            modelBuilder.Entity<Notification>().Property(p => p.AgentType)
+                .HasConversion(
+                    agentType => agentType.ToString(),
+                    agentType => Enum.Parse<eAgentType>(agentType)
+                );
+
+            modelBuilder.Entity<Chat>().Property(p => p.AgentType)
+                .HasConversion<string>();
         }
 
         public DbSet<Store> Stores => Set<Store>();
@@ -51,5 +74,8 @@ namespace Infrastructure.Data
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderItem> OrderItems => Set<OrderItem>();
         public DbSet<Complaint> Complaints => Set<Complaint>();
+        public DbSet<Chat> Chats => Set<Chat>();
+        public DbSet<ChatRole> ChatRoles => Set<ChatRole>();
+        public DbSet<Notification> Notifications => Set<Notification>();
     }
 }
