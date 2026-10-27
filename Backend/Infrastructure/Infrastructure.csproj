@@ -7,13 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Resources\ComplaintAgentSysPrompt.txt" />
-    <Compile Include="Resources\DealerAgentSysPrompt.txt">
+    <None Update="Resources\ComplaintAgentSysPrompt.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Resources\ProductsSearchAgentSysPrompt.txt">
+    </None>
+    <None Update="Resources\DealerAgentSysPrompt.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
+    </None>
+    <None Update="Resources\ProductsSearchAgentSysPrompt.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\AdvisorAgentSysPrompt.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -25,12 +30,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Resources\AdvisorAgentSysPrompt.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

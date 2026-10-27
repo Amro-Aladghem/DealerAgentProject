@@ -15,7 +15,7 @@ namespace CarDealer.ContextFactory
 
             var builder = new DbContextOptionsBuilder<AppDbContext>()
             .UseNpgsql(configuration.GetSection("SQL_CONNECTION_STRING").Value,
-            b => b.MigrationsAssembly("FridgyApi"));
+            b => b.MigrationsAssembly("CarDealer"));
 
             return new AppDbContext(builder.Options);
         }

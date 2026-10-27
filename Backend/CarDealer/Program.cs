@@ -1,20 +1,88 @@
+using Application.Backgroundworkers;
+using Application.Dtos;
+using Application.Tools;
+using Application.Tools.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.ExternalServices;
 using Microsoft.EntityFrameworkCore;
-
+using Mscc.GenerativeAI;
+using Mscc.GenerativeAI.Types;
+using System.Reflection;
+using System.Threading.Channels;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
 
+builder.Services.AddDbContext<AppDbContext>(context =>
+    context.UseNpgsql(builder.Configuration["SQL_CONNECTION_STRING"]));
 
-builder.Services.AddDbContext<AppDbContext>(context => 
-context.UseNpgsql(builder.Configuration["SQL_CONNECTION_STRING"]));
+builder.Services.AddSingleton<GoogleAI>(sp => new GoogleAI(apiKey: builder.Configuration["geminiApi"]!));
+builder.Services.AddSingleton<GenerationConfig>(gc => new GenerationConfig() { ResponseMimeType = "application/json", Temperature = 0 });
 
+builder.Services.AddSingleton<Channel<AgentRequestDto>>(
+    _ => Channel.CreateUnbounded<AgentRequestDto>()
+);
 
+var applicationAssembly = typeof(IAgentTool).Assembly;
+var infrastructureAssembly = typeof(AppDbContext).Assembly;
+
+var serviceNamespaces = new (Assembly Assembly, string Namespace)[]
+{
+    (applicationAssembly, "Application.Services"),
+    (applicationAssembly, "Application.Services.Coordinators"),
+    (applicationAssembly, "Application.Agents"),
+    (applicationAssembly, "Application.Tools.Coordinator"),
+    (infrastructureAssembly, "Infrastructure.AI"),
+};
+
+foreach (var (assembly, targetNamespace) in serviceNamespaces)
+{
+    var serviceTypes = assembly.GetTypes()
+        .Where(type => type.IsClass && !type.IsAbstract && type.Namespace == targetNamespace);
+
+    foreach (var serviceType in serviceTypes)
+        builder.Services.AddScoped(serviceType);
+}
+
+var toolTypes = applicationAssembly.GetTypes()
+    .Where(type => type.IsClass && !type.IsAbstract && typeof(IAgentTool).IsAssignableFrom(type));
+
+foreach (var toolType in toolTypes)
+{
+    builder.Services.AddScoped(toolType);
+    builder.Services.AddScoped(typeof(IAgentTool), provider => provider.GetRequiredService(toolType));
+}
+
+builder.Services.AddScoped<ToolExecutor>();
+builder.Services.AddHttpClient<AgentDecisionService>();
+
+builder.Services.AddHostedService<AgentBackgroundWorker>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173", "http://localhost:5174")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
+});
+
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
 
 app.UseHttpsRedirection();
+
+app.UseCors("Frontend");
 
 app.UseAuthorization();
 

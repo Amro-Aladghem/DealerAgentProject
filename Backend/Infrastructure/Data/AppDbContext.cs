@@ -41,13 +41,13 @@ namespace Infrastructure.Data
                     status => Enum.Parse<eOrderStatus>(status)
                 );
 
-            //modelBuilder.Entity<ChatRole>().HasData(
-            //    new ChatRole { Id = 1, Name = "InventoryAgent" },
-            //    new ChatRole { Id = 2, Name = "MonitorAgent" },
-            //    new ChatRole { Id = 3, Name = "ShoppingListAgent" },
-            //    new ChatRole { Id = 4, Name = "User" },
-            //    new ChatRole { Id = 5, Name = "Tool" }
-            //);
+            modelBuilder.Entity<ChatRole>().HasData(
+                new ChatRole { Id = 1, Name = "DealerAgent" },
+                new ChatRole { Id = 2, Name = "AdvisorAgent" },
+                new ChatRole { Id = 3, Name = "ProductsSearchAgent" },
+                new ChatRole { Id = 4, Name = "User" },
+                new ChatRole { Id = 5, Name = "Tool" }
+            );
 
             modelBuilder.Entity<Notification>().Property(p => p.NotficationStatus)
                 .HasConversion(
