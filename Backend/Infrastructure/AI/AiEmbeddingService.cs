@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Infrastructure.AI.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Mscc.GenerativeAI;
 using Mscc.GenerativeAI.Types;
 using System;
@@ -8,7 +9,7 @@ using System.Text;
 namespace Infrastructure.AI
 {
 
-    public class AiEmbeddingService
+    public class AiEmbeddingService : IAiEmbeddingService
     {
         private readonly IConfiguration _configuration;
         private readonly GoogleAI _googleAi;

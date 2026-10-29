@@ -2,6 +2,7 @@
 using Domain.Enums;
 using Infrastructure.AI.Chat;
 using Infrastructure.AI.Interfaces;
+using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,6 +31,7 @@ namespace Application.Services.Coordinators
                 DealerAgentChat => (int)eAgentType.DealerAgent,
                 AdvisorAgentChat => (int)eAgentType.AdvisorAgent,
                 ProductsSearchAgentChat => (int)eAgentType.ProductsSearchAgent,
+                ComplaintAgentChat=>(int)eAgentType.ComplaintAgent,
                 _=> throw new Exception("agent chat parameter is not IAgentChat")
             };
 
@@ -44,6 +46,7 @@ namespace Application.Services.Coordinators
                 DealerAgentChat => eAgentType.DealerAgent,
                 AdvisorAgentChat => eAgentType.AdvisorAgent,
                 ProductsSearchAgentChat => eAgentType.ProductsSearchAgent,
+                ComplaintAgentChat =>eAgentType.ComplaintAgent,
                 _ => throw new Exception("agent chat parameter is not IAgentChat")
             };
         }
@@ -71,7 +74,6 @@ namespace Application.Services.Coordinators
 
                 List<ChatDto>? chatHistory = await _chatService.GetChatsForChatId(storeId, chatSignture);
 
-                chatHistory = FilterChatHistoryByAgentType(chatHistory, agentType);
 
                 string? response = await agentChat.Chat(storeId, chatHistory);
 

@@ -10,28 +10,27 @@ namespace Application.Services.Coordinators
 {
     public class AgentOrchestratorService
     {
-        private readonly CarDealerAgent _carDealerAgent;
+        private readonly DealerAgent _carDealerAgent;
         private readonly AdvisorAgent _advisorAgent;
         private readonly ProductsSearchAgent _productsSearchAgent;
         private readonly ComplaintAgent _complaintAgent;
 
-        private readonly IAgent _primaryRequestAgent;
-        private IAgent _currentWorkingAgent;
+        private IAgent? _primaryRequestAgent;
+        private IAgent? _currentWorkingAgent;
 
-        public AgentOrchestratorService(IAgent primaryRequestAgent, CarDealerAgent carDealerAgent, AdvisorAgent advisorAgent, ProductsSearchAgent productsSearchAgent,
+        public AgentOrchestratorService(DealerAgent carDealerAgent, AdvisorAgent advisorAgent, ProductsSearchAgent productsSearchAgent,
             ComplaintAgent complaintAgent)
         {
             _carDealerAgent = carDealerAgent;
             _advisorAgent = advisorAgent;
             _productsSearchAgent = productsSearchAgent;
             _complaintAgent = complaintAgent;
-
-            _primaryRequestAgent = (BaseAgent)primaryRequestAgent;
-            _currentWorkingAgent = primaryRequestAgent;
         }
 
         public async Task<AgentRunResultDto> ExecuteAgentic(AgentRequestDto agentRequestDto)
         {
+            InitPrimaryAndCurrentAgent(agentRequestDto.AgentType!);
+
             AgentRunResultDto agentRunResultDto = new AgentRunResultDto();
             BaseAgent currentAgent;
 
@@ -50,6 +49,7 @@ namespace Application.Services.Coordinators
                 if (agentRunResultDto.AskUser || agentRunResultDto.IsFinished)
                 {
                     _currentWorkingAgent = _primaryRequestAgent;
+                    agentRunResultDto.IsFinished = false;
                     continue;
                 }
 
@@ -65,7 +65,7 @@ namespace Application.Services.Coordinators
         {
             BaseAgent currentAgent = _currentWorkingAgent switch
             {
-                CarDealerAgent => _carDealerAgent,
+                DealerAgent => _carDealerAgent,
                 AdvisorAgent => _advisorAgent,
                 ProductsSearchAgent => _productsSearchAgent,
                 ComplaintAgent => _complaintAgent,
@@ -79,13 +79,26 @@ namespace Application.Services.Coordinators
         {
             _currentWorkingAgent = agentName switch
             {
-                "CarDealerAgent" => _carDealerAgent,
+                "DealerAgent" => _carDealerAgent,
                 "AdvisorAgent" => _advisorAgent,
                 "ProductsSearchAgent"=>_productsSearchAgent,
-                _=>throw new Exception($"There is no sub agent with name: ${agentName}")
+                _ =>throw new Exception($"There is no sub agent with name: ${agentName}")
             };
         }
 
+        private void InitPrimaryAndCurrentAgent(string agentName)
+        {
+            _primaryRequestAgent = agentName switch
+            {
+                "DealerAgent" => _carDealerAgent,
+                "AdvisorAgent" => _advisorAgent,
+                "ProductsSearchAgent" => _productsSearchAgent,
+                "ComplaintAgent" => _complaintAgent,
+                _ => throw new Exception($"There is no sub agent with name: ${agentName}")
+            };
+            _currentWorkingAgent = _primaryRequestAgent;
+        }
+        
         private bool IsCurrentEqualPrimary() 
             => _primaryRequestAgent == _currentWorkingAgent;
     }

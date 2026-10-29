@@ -6,6 +6,11 @@ export type { CartDto, CartItemDto } from '@/types/cart';
 export type { OrderDto, OrderItemDto } from '@/types/order';
 export type { ChatDto, AgentRequestDto } from '@/types/chat';
 export type { NotificationDto } from '@/types/notification';
+export type {
+  ChatTimelineItem,
+  ChatTimelineUserItem,
+  ChatExecutionGroup,
+} from '@/types/chatSession';
 export {
   eOrderItemType,
   eOrderStatus,
@@ -14,3 +19,4 @@ export {
   orderStatusLabels,
   orderItemTypeLabels,
 } from '@/types/enums';
+export type { AgentType, NotificationStatus } from '@/types/enums';

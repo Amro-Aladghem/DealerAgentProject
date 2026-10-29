@@ -1,6 +1,8 @@
 import { AppHeader } from '@/components/layout/AppHeader';
 import { ChatLauncher } from '@/components/chat/ChatLauncher';
+import { ChatPanel } from '@/components/chat/ChatPanel';
 import { CartProvider } from '@/contexts/CartContext';
+import { ChatProvider } from '@/contexts/ChatContext';
 import { matchPath, RouterProvider, useRouter } from '@/libs/router';
 import { CartView } from '@/views/CartView';
 import { HomeView } from '@/views/HomeView';
@@ -34,17 +36,20 @@ function AppShell() {
         <CurrentView />
       </main>
       <ChatLauncher />
+      <ChatPanel />
     </div>
   );
 }
 
 function App() {
   return (
-    <CartProvider>
-      <RouterProvider>
-        <AppShell />
-      </RouterProvider>
-    </CartProvider>
+    <ChatProvider>
+      <CartProvider>
+        <RouterProvider>
+          <AppShell />
+        </RouterProvider>
+      </CartProvider>
+    </ChatProvider>
   );
 }
 

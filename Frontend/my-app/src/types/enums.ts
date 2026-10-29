@@ -34,6 +34,19 @@ export const eChatRole = {
 
 export type eChatRole = (typeof eChatRole)[keyof typeof eChatRole];
 
+export type AgentType =
+  | 'DealerAgent'
+  | 'AdvisorAgent'
+  | 'ProductsSearchAgent'
+  | 'ComplaintAgent';
+
+export type NotificationStatus =
+  | 'Queued'
+  | 'Running'
+  | 'WaitingForUser'
+  | 'Completed'
+  | 'Failed';
+
 export const orderStatusLabels: Record<number, string> = {
   [eOrderStatus.Pending]: 'Pending',
   [eOrderStatus.Confirmed]: 'Confirmed',

@@ -24,7 +24,7 @@ namespace Infrastructure.AI.Chat
 
 
         private readonly static Content ComplaintAgentSysPrompt = new Content(File.ReadAllText(
-            Path.Combine(AppContext.BaseDirectory, "Resources", "AdvisorAgentSysPrompt.txt")
+            Path.Combine(AppContext.BaseDirectory, "Resources", "ComplaintAgentSysPrompt.txt")
         ));
 
         public async Task<string?> Chat(Guid inventoryId, object? messagesContext)

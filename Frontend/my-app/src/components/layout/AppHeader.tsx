@@ -1,8 +1,11 @@
-import { ShoppingCart } from 'lucide-react';
+import { useState } from 'react';
+import { Bell, ShoppingCart } from 'lucide-react';
 import { Logo } from '@/components/layout/Logo';
 import { Badge } from '@/components/ui/Badge';
 import { IconButton } from '@/components/ui/IconButton';
+import { NotificationDialog } from '@/components/notifications/NotificationDialog';
 import { useCart } from '@/contexts/CartContext';
+import { useChat } from '@/contexts/ChatContext';
 import { cn } from '@/libs/cn';
 import { NavLink, useNavigate } from '@/libs/router';
 
@@ -11,7 +14,10 @@ const linkClass =
 
 export function AppHeader() {
   const { count } = useCart();
+  const { notifications } = useChat();
   const navigate = useNavigate();
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const notificationCount = notifications.length;
 
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-surface/90 backdrop-blur">
@@ -32,6 +38,18 @@ export function AppHeader() {
             Orders
           </NavLink>
 
+          <IconButton
+            label="Notifications"
+            onClick={() => setNotificationsOpen(true)}
+          >
+            <Bell size={20} />
+            {notificationCount > 0 && (
+              <Badge className="pointer-events-none absolute -right-0.5 -top-0.5">
+                {notificationCount > 99 ? '99+' : notificationCount}
+              </Badge>
+            )}
+          </IconButton>
+
           <IconButton label="Cart" onClick={() => navigate('/cart')}>
             <ShoppingCart size={20} />
             {count > 0 && (
@@ -42,6 +60,11 @@ export function AppHeader() {
           </IconButton>
         </nav>
       </div>
+
+      <NotificationDialog
+        open={notificationsOpen}
+        onClose={() => setNotificationsOpen(false)}
+      />
     </header>
   );
 }

@@ -2,11 +2,14 @@ using Application.Backgroundworkers;
 using Application.Dtos;
 using Application.Tools;
 using Application.Tools.Interfaces;
+using Infrastructure.AI;
+using Infrastructure.AI.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.ExternalServices;
 using Microsoft.EntityFrameworkCore;
 using Mscc.GenerativeAI;
 using Mscc.GenerativeAI.Types;
+using Services.ExternalServices.QdrantServices;
 using System.Reflection;
 using System.Threading.Channels;
 
@@ -32,6 +35,8 @@ var serviceNamespaces = new (Assembly Assembly, string Namespace)[]
     (applicationAssembly, "Application.Agents"),
     (applicationAssembly, "Application.Tools.Coordinator"),
     (infrastructureAssembly, "Infrastructure.AI"),
+    (infrastructureAssembly, "Infrastructure.AI.Chat"),
+    (infrastructureAssembly, "Services.ExternalServices.QdrantServices"),
 };
 
 foreach (var (assembly, targetNamespace) in serviceNamespaces)
@@ -52,6 +57,7 @@ foreach (var toolType in toolTypes)
     builder.Services.AddScoped(typeof(IAgentTool), provider => provider.GetRequiredService(toolType));
 }
 
+builder.Services.AddScoped<IAiEmbeddingService, AiEmbeddingService>();
 builder.Services.AddScoped<ToolExecutor>();
 builder.Services.AddHttpClient<AgentDecisionService>();
 
@@ -79,8 +85,6 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-app.UseHttpsRedirection();
 
 app.UseCors("Frontend");
 

@@ -53,6 +53,36 @@ body {
   animation: fade-in 0.2s ease-out both;
 }
 
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-pop-in {
+  animation: pop-in 0.2s ease-out both;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.26s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
 .scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: var(--color-line) transparent;
@@ -65,6 +95,102 @@ body {
 .scrollbar-thin::-webkit-scrollbar-thumb {
   background-color: var(--color-line);
   border-radius: 9999px;
+}
+
+.markdown {
+  overflow-wrap: anywhere;
+}
+
+.markdown > :first-child {
+  margin-top: 0;
+}
+
+.markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown p {
+  margin: 0.35rem 0;
+}
+
+.markdown strong {
+  font-weight: 600;
+}
+
+.markdown ul,
+.markdown ol {
+  margin: 0.35rem 0;
+  padding-inline-start: 1.15rem;
+}
+
+.markdown ul {
+  list-style: disc;
+}
+
+.markdown ol {
+  list-style: decimal;
+}
+
+.markdown li {
+  margin: 0.15rem 0;
+}
+
+.markdown code {
+  border-radius: 0.375rem;
+  background: rgb(31 26 23 / 6%);
+  padding: 0.05rem 0.3rem;
+  font-size: 0.85em;
+}
+
+.markdown pre {
+  margin: 0.4rem 0;
+  overflow-x: auto;
+  border-radius: 0.75rem;
+  background: #1f1a17;
+  padding: 0.75rem;
+  color: #fff;
+}
+
+.markdown pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.markdown a {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  margin: 0.5rem 0 0.25rem;
+  font-weight: 600;
+}
+
+.markdown h1 {
+  font-size: 1.05rem;
+}
+
+.markdown h2 {
+  font-size: 1rem;
+}
+
+.markdown h3 {
+  font-size: 0.95rem;
+}
+
+.markdown blockquote {
+  margin: 0.4rem 0;
+  border-inline-start: 3px solid var(--color-line);
+  padding-inline-start: 0.6rem;
+  color: var(--color-muted);
+}
+
+.markdown hr {
+  margin: 0.6rem 0;
+  border-color: var(--color-line);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -15,17 +15,17 @@ namespace Infrastructure.AI.Chat
         private GenerativeModel _model;
         private readonly GenerationConfig _generationConfiq;
 
-        public DealerAgentChat(GoogleAI googleAI,GenerativeModel model, GenerationConfig generationConfig)
+        public DealerAgentChat(GoogleAI googleAI, GenerationConfig generationConfig)
         {
             _googleAI = googleAI;
             _generationConfiq = generationConfig;
 
-            _model = _googleAI.GenerativeModel(model:Model.Gemini25Flash);
+            _model = _googleAI.GenerativeModel(model: Model.Gemini25Flash);
 
         }
 
         private readonly static Content DealerAgentSysPromptSysPrompt = new Content(File.ReadAllText(
-             Path.Combine(AppContext.BaseDirectory, "Resources", "DealerAgentSysPromptSysPrompt.txt")
+             Path.Combine(AppContext.BaseDirectory, "Resources", "DealerAgentSysPrompt.txt")
          ));
 
         public async Task<string?> Chat(Guid inventoryId, object? messagesContext)
