@@ -2,6 +2,9 @@
 
 DealerAgent is an AI-powered car dealership assistant. You talk to it, and it manages the store for you: your cars, accessories, carts, orders, and complaints — through natural conversation (text or images).
 
+<img width="959" height="437" alt="Screenshot 2026-10-28 205604" src="https://github.com/user-attachments/assets/1788b475-1a09-4b26-91fc-4d2ce073c608" />
+
+
 ## 1. What DealerAgent Does
 
 - Browses the store inventory: cars, their makes, prices, quantities, and model years.
